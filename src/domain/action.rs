@@ -18,7 +18,6 @@ fn parse_expression<'a>(
     let token = lexer
         .next()
         .ok_or(("unexpected end of input", lexer.span()))?;
-    println!("{:?}", token);
     match token {
         Ok(Token::Name(name)) => {
             let mut parameters = Vec::new();
