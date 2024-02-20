@@ -18,6 +18,7 @@ fn parse_expression<'a>(
     let token = lexer
         .next()
         .ok_or(("unexpected end of input", lexer.span()))?;
+    println!("{:?}", token);
     match token {
         Ok(Token::Name(name)) => {
             let mut parameters = Vec::new();
@@ -43,6 +44,14 @@ fn parse_expression<'a>(
                 Ok(Token::LParen) => parse_expression(lexer),
                 _ => return Err(("unexpected token", lexer.span())),
             }?;
+            match lexer.next() {
+                Some(token) => match token {
+                    Ok(Token::RParen) => {}
+                    Ok(_) => return Err(("unexpected token", lexer.span())),
+                    Err(_) => return Err(("invalid token", lexer.span())),
+                },
+                None => return Err(("unexpected end of input", lexer.span())),
+            }
             return Ok(Expression::Not(Box::new(expression)));
         }
         Ok(Token::And) => {
@@ -118,7 +127,9 @@ pub fn parse<'a>(lexer: &mut Lexer<'a, Token<'a>>) -> Result<Action<'a>> {
                 precondition = Some(parse_expression_root(lexer)?)
             }
             Ok(Token::Effect) => effect = Some(parse_expression_root(lexer)?),
-            Ok(_) => continue,
+            Ok(Token::LParen) => continue,
+            Ok(Token::RParen) => break,
+            Ok(_) => return Err(("unexpected token", lexer.span())),
             Err(_) => return Err(("invalid token", lexer.span())),
         }
     }

@@ -1,5 +1,5 @@
 mod blocksworld {
-    use pddlp::domain::{self, Parameter, Predicate};
+    use pddlp::domain::{self, Action, Parameter, Predicate};
 
     pub const BLOCKSWORLD: &'static str = "
 ;; source: https://github.com/AI-Planning/pddl-generators/blob/main/blocksworld/domain.pddl
@@ -86,5 +86,6 @@ mod blocksworld {
             ],
             domain.predicates.unwrap()
         );
+        assert_eq!(4, domain.actions.len());
     }
 }
