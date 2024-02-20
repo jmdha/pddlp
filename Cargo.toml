@@ -3,6 +3,7 @@ name = "pddlp"
 version = "0.1.2"
 edition = "2021"
 authors = ["Jan M. D. Hansen"]
+license = "GPL-3.0-only"
 license-file = "LICENSE"
 repository = "https://github.com/jamadaha/pddlp"
 description = "A PDDL Parser"
