@@ -1,5 +1,5 @@
 use super::{parameters, token::Token, Action, Expression, Result};
-use logos::Lexer;
+use logos::{Lexer, Logos};
 
 fn parse_name<'a>(lexer: &mut Lexer<'a, Token<'a>>) -> Result<&'a str> {
     match lexer.next() {
@@ -104,7 +104,9 @@ fn parse_expression_root<'a>(
     }
 }
 
-pub fn parse<'a>(lexer: &mut Lexer<'a, Token<'a>>) -> Result<Action<'a>> {
+pub(super) fn parse_stream<'a>(
+    lexer: &mut Lexer<'a, Token<'a>>,
+) -> Result<Action<'a>> {
     let name = parse_name(lexer)?;
     let mut parameters = None;
     let mut precondition = None;
@@ -144,4 +146,25 @@ pub fn parse<'a>(lexer: &mut Lexer<'a, Token<'a>>) -> Result<Action<'a>> {
         precondition,
         effect,
     })
+}
+
+pub fn parse<'a>(input: &'a str) -> Result<Action<'a>> {
+    let mut lexer = Token::lexer(input);
+    match lexer.next() {
+        Some(token) => match token {
+            Ok(Token::LParen) => {}
+            Ok(_) => return Err(("unexpected token", lexer.span())),
+            Err(_) => return Err(("invalid token", lexer.span())),
+        },
+        None => return Err(("unexpected end of input", lexer.span())),
+    };
+    match lexer.next() {
+        Some(token) => match token {
+            Ok(Token::Action) => {}
+            Ok(_) => return Err(("unexpected token", lexer.span())),
+            Err(_) => return Err(("invalid token", lexer.span())),
+        },
+        None => return Err(("unexpected end of input", lexer.span())),
+    };
+    parse_stream(&mut lexer)
 }

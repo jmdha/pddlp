@@ -1,4 +1,4 @@
-mod action;
+pub mod action;
 mod name;
 mod parameters;
 mod predicates;
@@ -76,7 +76,9 @@ pub fn parse<'a>(input: &'a str) -> Result<Domain<'a>> {
             Ok(Token::Predicates) => {
                 predicates = Some(predicates::parse(&mut lexer)?)
             }
-            Ok(Token::Action) => actions.push(action::parse(&mut lexer)?),
+            Ok(Token::Action) => {
+                actions.push(action::parse_stream(&mut lexer)?)
+            }
             Ok(_) => continue,
             Err(_) => return Err(("invalid token", lexer.span())),
         }
