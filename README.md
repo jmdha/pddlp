@@ -1,5 +1,15 @@
 # pddlp
 
+[![Rust](https://github.com/jamadaha/seeker/actions/workflows/rust.yml/badge.svg)](https://github.com/jamadaha/seeker/actions/workflows/rust.yml)
+
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/jamadaha/seeker/master)
+![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/m/jamadaha/seeker)
+
+![Crates.io Version](https://img.shields.io/crates/v/pddlp)
+![Crates.io Total Downloads](https://img.shields.io/crates/d/pddlp)
+
+
+
 _A simple, fast, and robust PDDL parser_
 
 **pddlp** has three goals:
