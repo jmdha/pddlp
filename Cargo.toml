@@ -1,6 +1,6 @@
 [package]
 name = "pddlp"
-version = "0.1.5"
+version = "0.1.6"
 edition = "2021"
 authors = ["Jan M. D. Hansen"]
 license-file = "LICENSE"
@@ -11,7 +11,7 @@ description = "A PDDL Parser"
 logos = { features = ["export_derive"], default-features = false, version = "0.14.0" }
 
 [dev-dependencies]
-rstest = "0.18.2"
+rstest = "0.19.0"
 criterion = "0.5.1"
 
 [[bench]]
