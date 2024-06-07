@@ -39,6 +39,6 @@ pub(super) enum Token<'a> {
     #[token("-")]
     TypeSeparator,
 
-    #[regex("[a-zA-Z][a-zA-Z0-9-_]*")]
+    #[regex("[a-zA-Z0-9-_]*")]
     Name(&'a str),
 }
