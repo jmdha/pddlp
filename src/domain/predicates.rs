@@ -1,9 +1,8 @@
-use super::{parameters, token::Token, Predicate, Result};
+use super::{parameters, Predicate, Result};
+use crate::token::Token;
 use logos::Lexer;
 
-fn parse_predicate<'a>(
-    lexer: &mut Lexer<'a, Token<'a>>,
-) -> Result<Predicate<'a>> {
+fn parse_predicate<'a>(lexer: &mut Lexer<'a, Token<'a>>) -> Result<Predicate<'a>> {
     let name = match lexer.next() {
         Some(token) => match token {
             Ok(Token::Name(name)) => name,
@@ -16,9 +15,7 @@ fn parse_predicate<'a>(
     Ok(Predicate { name, parameters })
 }
 
-pub fn parse<'a>(
-    lexer: &mut Lexer<'a, Token<'a>>,
-) -> Result<Vec<Predicate<'a>>> {
+pub fn parse<'a>(lexer: &mut Lexer<'a, Token<'a>>) -> Result<Vec<Predicate<'a>>> {
     let mut predicates = Vec::new();
 
     while let Some(token) = lexer.next() {

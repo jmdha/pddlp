@@ -1,4 +1,5 @@
-use super::{token::Token, Fact, Goal, Result};
+use crate::token::Token;
+use super::{Fact, Goal, Result};
 use logos::Lexer;
 
 //  NOTE: assumes opening bracket '(' is consumed
@@ -39,9 +40,7 @@ fn parse_expression<'a>(lexer: &mut Lexer<'a, Token<'a>>) -> Result<Goal<'a>> {
             while let Some(token) = lexer.next() {
                 match token {
                     Ok(Token::RParen) => return Ok(Goal::And(expressions)),
-                    Ok(Token::LParen) => {
-                        expressions.push(parse_expression(lexer)?)
-                    }
+                    Ok(Token::LParen) => expressions.push(parse_expression(lexer)?),
                     _ => return Err(("unexpected token", lexer.span())),
                 }
             }
@@ -54,9 +53,7 @@ fn parse_expression<'a>(lexer: &mut Lexer<'a, Token<'a>>) -> Result<Goal<'a>> {
             while let Some(token) = lexer.next() {
                 match token {
                     Ok(Token::RParen) => return Ok(Goal::Or(expressions)),
-                    Ok(Token::LParen) => {
-                        expressions.push(parse_expression(lexer)?)
-                    }
+                    Ok(Token::LParen) => expressions.push(parse_expression(lexer)?),
                     _ => return Err(("unexpected token", lexer.span())),
                 }
             }

@@ -3,12 +3,13 @@ mod name;
 mod parameters;
 mod predicates;
 mod requirements;
-mod token;
 mod types;
 
-use self::token::Token;
-use super::Result;
 use logos::Logos;
+
+use crate::token::Token;
+
+use super::Result;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub struct Domain<'a> {
@@ -69,16 +70,10 @@ pub fn parse<'a>(input: &'a str) -> Result<Domain<'a>> {
     while let Some(token) = lexer.next() {
         match token {
             Ok(Token::DomainName) => name = Some(name::parse(&mut lexer)?),
-            Ok(Token::Requirements) => {
-                requirements = Some(requirements::parse(&mut lexer)?)
-            }
+            Ok(Token::Requirements) => requirements = Some(requirements::parse(&mut lexer)?),
             Ok(Token::Types) => types = Some(types::parse(&mut lexer)?),
-            Ok(Token::Predicates) => {
-                predicates = Some(predicates::parse(&mut lexer)?)
-            }
-            Ok(Token::Action) => {
-                actions.push(action::parse_stream(&mut lexer)?)
-            }
+            Ok(Token::Predicates) => predicates = Some(predicates::parse(&mut lexer)?),
+            Ok(Token::Action) => actions.push(action::parse_stream(&mut lexer)?),
             Ok(_) => continue,
             Err(_) => return Err(("invalid token", lexer.span())),
         }

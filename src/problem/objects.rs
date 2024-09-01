@@ -1,9 +1,8 @@
-use super::{token::Token, Object, Result};
+use crate::token::Token;
+use super::{Object, Result};
 use logos::Lexer;
 
-pub(super) fn parse<'a>(
-    lexer: &mut Lexer<'a, Token<'a>>,
-) -> Result<Vec<Object<'a>>> {
+pub(super) fn parse<'a>(lexer: &mut Lexer<'a, Token<'a>>) -> Result<Vec<Object<'a>>> {
     let mut objects = Vec::new();
 
     let mut object_names: Vec<&'a str> = Vec::new();

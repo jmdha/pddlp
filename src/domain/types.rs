@@ -1,4 +1,5 @@
-use super::{token::Token, Result, Type};
+use crate::token::Token;
+use super::{Result, Type};
 use logos::Lexer;
 
 pub fn parse<'a>(lexer: &mut Lexer<'a, Token<'a>>) -> Result<Vec<Type<'a>>> {

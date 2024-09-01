@@ -1,8 +1,6 @@
 mod step;
-mod token;
 
-use self::token::Token;
-use crate::Result;
+use crate::{token::Token, Result};
 use logos::Logos;
 
 /// Denotes a single step in a plan

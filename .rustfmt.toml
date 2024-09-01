@@ -1,7 +1,0 @@
-max_width = 80
-
-imports_granularity = "One"
-merge_imports = true
-group_imports = "One"
-
-trailing_comma = "Never"

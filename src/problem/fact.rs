@@ -1,4 +1,5 @@
-use super::{token::Token, Fact, Result};
+use crate::token::Token;
+use super::{Fact, Result};
 use logos::Lexer;
 
 pub fn parse<'a>(lexer: &mut Lexer<'a, Token<'a>>) -> Result<Fact<'a>> {

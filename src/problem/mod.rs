@@ -3,9 +3,9 @@ mod goal;
 mod init;
 mod name;
 mod objects;
-mod token;
 
-use self::token::Token;
+use crate::token::Token;
+
 use super::Result;
 use logos::Logos;
 
@@ -58,7 +58,7 @@ pub fn parse<'a>(input: &'a str) -> Result<Problem<'a>> {
     while let Some(token) = lexer.next() {
         match token {
             Ok(Token::ProblemName) => name = Some(name::parse(&mut lexer)?),
-            Ok(Token::DomainName) => domain = Some(name::parse(&mut lexer)?),
+            Ok(Token::DomainDefinition) => domain = Some(name::parse(&mut lexer)?),
             Ok(Token::Objects) => objects = Some(objects::parse(&mut lexer)?),
             Ok(Token::Init) => init = Some(init::parse(&mut lexer)?),
             Ok(Token::Goal) => goal = Some(goal::parse(&mut lexer)?),

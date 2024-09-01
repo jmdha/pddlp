@@ -1,9 +1,9 @@
-use super::{token::Token, Parameter, Result};
+use crate::token::Token;
+
+use super::{Parameter, Result};
 use logos::Lexer;
 
-pub fn parse<'a>(
-    lexer: &mut Lexer<'a, Token<'a>>,
-) -> Result<Vec<Parameter<'a>>> {
+pub fn parse<'a>(lexer: &mut Lexer<'a, Token<'a>>) -> Result<Vec<Parameter<'a>>> {
     let mut parameters = Vec::new();
 
     let mut queue: Vec<&'a str> = Vec::new();

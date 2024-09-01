@@ -1,9 +1,8 @@
-use super::{fact, token::Token, Fact, Result};
+use crate::token::Token;
+use super::{fact, Fact, Result};
 use logos::Lexer;
 
-pub(super) fn parse<'a>(
-    lexer: &mut Lexer<'a, Token<'a>>,
-) -> Result<Vec<Fact<'a>>> {
+pub(super) fn parse<'a>(lexer: &mut Lexer<'a, Token<'a>>) -> Result<Vec<Fact<'a>>> {
     let mut facts = Vec::new();
 
     while let Some(token) = lexer.next() {

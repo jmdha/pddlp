@@ -1,4 +1,5 @@
-use super::{parameters, token::Token, Action, Expression, Result};
+use crate::token::Token;
+use super::{parameters, Action, Expression, Result};
 use logos::{Lexer, Logos};
 
 fn parse_name<'a>(lexer: &mut Lexer<'a, Token<'a>>) -> Result<&'a str> {
@@ -12,9 +13,7 @@ fn parse_name<'a>(lexer: &mut Lexer<'a, Token<'a>>) -> Result<&'a str> {
     }
 }
 
-fn parse_expression<'a>(
-    lexer: &mut Lexer<'a, Token<'a>>,
-) -> Result<Expression<'a>> {
+fn parse_expression<'a>(lexer: &mut Lexer<'a, Token<'a>>) -> Result<Expression<'a>> {
     let token = lexer
         .next()
         .ok_or(("unexpected end of input", lexer.span()))?;
@@ -58,12 +57,8 @@ fn parse_expression<'a>(
 
             while let Some(token) = lexer.next() {
                 match token {
-                    Ok(Token::RParen) => {
-                        return Ok(Expression::And(expressions))
-                    }
-                    Ok(Token::LParen) => {
-                        expressions.push(parse_expression(lexer)?)
-                    }
+                    Ok(Token::RParen) => return Ok(Expression::And(expressions)),
+                    Ok(Token::LParen) => expressions.push(parse_expression(lexer)?),
                     _ => return Err(("unexpected token", lexer.span())),
                 }
             }
@@ -75,12 +70,8 @@ fn parse_expression<'a>(
 
             while let Some(token) = lexer.next() {
                 match token {
-                    Ok(Token::RParen) => {
-                        return Ok(Expression::Or(expressions))
-                    }
-                    Ok(Token::LParen) => {
-                        expressions.push(parse_expression(lexer)?)
-                    }
+                    Ok(Token::RParen) => return Ok(Expression::Or(expressions)),
+                    Ok(Token::LParen) => expressions.push(parse_expression(lexer)?),
                     _ => return Err(("unexpected token", lexer.span())),
                 }
             }
@@ -91,9 +82,7 @@ fn parse_expression<'a>(
     }
 }
 
-fn parse_expression_root<'a>(
-    lexer: &mut Lexer<'a, Token<'a>>,
-) -> Result<Expression<'a>> {
+fn parse_expression_root<'a>(lexer: &mut Lexer<'a, Token<'a>>) -> Result<Expression<'a>> {
     match lexer.next() {
         Some(token) => match token {
             Ok(Token::LParen) => parse_expression(lexer),
@@ -104,9 +93,7 @@ fn parse_expression_root<'a>(
     }
 }
 
-pub(super) fn parse_stream<'a>(
-    lexer: &mut Lexer<'a, Token<'a>>,
-) -> Result<Action<'a>> {
+pub(super) fn parse_stream<'a>(lexer: &mut Lexer<'a, Token<'a>>) -> Result<Action<'a>> {
     let name = parse_name(lexer)?;
     let mut parameters = None;
     let mut precondition = None;
@@ -116,17 +103,13 @@ pub(super) fn parse_stream<'a>(
         match token {
             Ok(Token::Parameters) => match lexer.next() {
                 Some(token) => match token {
-                    Ok(Token::LParen) => {
-                        parameters = Some(parameters::parse(lexer)?)
-                    }
+                    Ok(Token::LParen) => parameters = Some(parameters::parse(lexer)?),
                     Ok(_) => return Err(("unexpected token", lexer.span())),
                     Err(_) => return Err(("invalid token", lexer.span())),
                 },
                 None => return Err(("unexpected end of input", lexer.span())),
             },
-            Ok(Token::Precondition) => {
-                precondition = Some(parse_expression_root(lexer)?)
-            }
+            Ok(Token::Precondition) => precondition = Some(parse_expression_root(lexer)?),
             Ok(Token::Effect) => effect = Some(parse_expression_root(lexer)?),
             Ok(Token::LParen) => continue,
             Ok(Token::RParen) => break,

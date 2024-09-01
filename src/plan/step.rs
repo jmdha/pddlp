@@ -1,5 +1,5 @@
-use super::{token::Token, Step};
-use crate::Result;
+use super::Step;
+use crate::{token::Token, Result};
 use logos::Lexer;
 
 pub(super) fn parse<'a>(lexer: &mut Lexer<'a, Token<'a>>) -> Result<Step<'a>> {
